@@ -12,13 +12,14 @@ import android.graphics.Paint
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.RectF
+import android.util.Log
 
 val nodes : Int = 5
 val bars : Int = 3
 val scGap : Float = 0.02f / bars
 val delay : Long = 20
 val sizeFactor : Float = 2f
-val foreColor : Int = Color.parseColor("#BDBDBD")
+val foreColor : Int = Color.parseColor("#311B92")
 val backColor : Int = Color.parseColor("#BDBDBD")
 val strokeFactor : Float = 90f
 
@@ -31,6 +32,9 @@ fun Canvas.drawStepDivideBar(i : Int, w : Float, scale : Float, hGap : Float, pa
     val gap : Float = w / (bars)
     val barSize : Float = gap / sizeFactor
     val sc : Float = scale.sinify().divideScale(i, bars)
+    if (scale > 0) {
+        Log.d("coords", "${i}:${sc}")
+    }
     save()
     translate(gap * i + barSize / 2, 0f)
     drawRect(RectF(0f, -hGap * sc, barSize, 0f), paint)
@@ -51,8 +55,9 @@ fun Canvas.drawBSDNode(i : Int, scale : Float, paint : Paint) {
     paint.strokeCap = Paint.Cap.ROUND
     paint.strokeWidth = Math.min(w, h) / strokeFactor
     save()
-    translate(0f, gap * i + gap / 2)
-    drawLine(0f, 0f, gap , 0f, paint)
+    translate(0f, gap * (i + 1))
+    Log.d("y", "${gap * i + gap / 2}")
+    drawLine(0f, 0f, w , 0f, paint)
     drawStepDividerBars(w, scale, gap, paint)
     restore()
 }
@@ -99,7 +104,6 @@ class BarStepDivideView(ctx : Context) : View(ctx) {
     data class Animator(var view : View, var animated : Boolean = false) {
 
         fun animate(cb : () -> Unit) {
-
             if (animated) {
                 cb()
                 try {
@@ -157,7 +161,7 @@ class BarStepDivideView(ctx : Context) : View(ctx) {
         fun getNext(dir : Int, cb : () -> Unit) : BSDNode {
             var curr : BSDNode? = prev
             if (dir == 1) {
-                curr = null
+                curr = next
             }
             if (curr != null) {
                 return curr
@@ -209,6 +213,7 @@ class BarStepDivideView(ctx : Context) : View(ctx) {
 
         fun handleTap() {
             sdb.startUpdating {
+                Log.d("started animating", "animator")
                 animator.start()
             }
         }
