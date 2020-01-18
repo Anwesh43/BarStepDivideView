@@ -190,4 +190,26 @@ class BarStepDivideView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : BarStepDivideView) {
+
+        private val animator : Animator = Animator(view)
+        private val sdb : StepDivideBar = StepDivideBar(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(backColor)
+            sdb.draw(canvas, paint)
+            animator.animate {
+                sdb.update {
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            sdb.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
