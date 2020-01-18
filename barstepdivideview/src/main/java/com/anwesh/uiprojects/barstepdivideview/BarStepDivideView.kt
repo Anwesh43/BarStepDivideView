@@ -17,7 +17,7 @@ import android.util.Log
 val nodes : Int = 5
 val bars : Int = 3
 val scGap : Float = 0.02f / bars
-val delay : Long = 20
+val delay : Long = 10
 val sizeFactor : Float = 2f
 val foreColor : Int = Color.parseColor("#311B92")
 val backColor : Int = Color.parseColor("#BDBDBD")
