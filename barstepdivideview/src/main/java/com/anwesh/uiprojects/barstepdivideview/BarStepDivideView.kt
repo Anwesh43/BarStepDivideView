@@ -213,4 +213,13 @@ class BarStepDivideView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : BarStepDivideView {
+            val view : BarStepDivideView = BarStepDivideView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
